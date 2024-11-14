@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { deleteUser } from "../services/api";
-import UserEditor from "./userEditor";
 
-const UserList = ({
-  users,
-  error,
-  onUserUpdated,
-  onUserDeleted,
-  onUserSelected,
-}) => {
-  const [editingUserId, setEditingUserId] = useState(null);
-
+const UserList = ({ users, error, onUserDeleted, onUserSelected }) => {
   const handleDelete = (id) => {
     deleteUser(id)
       .then(() => onUserDeleted())
@@ -20,7 +11,8 @@ const UserList = ({
   };
 
   const handleEditClick = (id) => {
-    setEditingUserId(id);
+    console.log("handleEditClick", id);
+    onUserSelected(id);
   };
 
   return (
@@ -31,21 +23,18 @@ const UserList = ({
           <li key={user.id}>
             <p>{user.id}</p>
             <img
-              src={`http://localhost:3000/users/${user.id}/profile`}
+              src={`http://localhost:3000/users/${
+                user.id
+              }/profile?timestamp=${new Date().getTime()}`}
               alt="Profile"
               width="50"
             />
-            {editingUserId === user.id ? (
-              <UserEditor user={user} onSave={onUserUpdated} />
-            ) : (
-              <>
-                <span>
-                  {user.email} ({user.age} years)
-                </span>
-                <button onClick={() => handleEditClick(user.id)}>Edit</button>
-                <button onClick={() => handleDelete(user.id)}>Delete</button>
-              </>
-            )}
+
+            <span>
+              {user.email} ({user.age} years)
+            </span>
+            <button onClick={() => handleEditClick(user.id)}>Edit</button>
+            <button onClick={() => handleDelete(user.id)}>Delete</button>
           </li>
         ))}
       </ul>

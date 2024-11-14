@@ -8,15 +8,20 @@ import UserEditor from "./components/userEditor";
 
 function App() {
   const [users, setUsers] = useState([]);
-  const [activeUserId, setActiveUser] = useState(null);
+  const [activeUserId, setActiveUser] = useState(-1);
   const [error, setError] = useState(null);
 
   const loadUsers = () => {
+    console.log("loadUsers");
     fetchUsers()
       .then((response) => setUsers(response.data))
       .catch((error) =>
         setError(error.response?.data.message || "Unknown error")
       );
+  };
+
+  const onCancel = () => {
+    setActiveUser(-1);
   };
 
   useEffect(() => {
@@ -35,8 +40,12 @@ function App() {
           onUserDeleted={loadUsers}
         />
         <UserCreator onUserAdded={loadUsers} />
-        {activeUserId != null && (
-          <UserEditor user_id={activeUserId} onSave={loadUsers} />
+        {activeUserId !== -1 && (
+          <UserEditor
+            user_id={activeUserId}
+            onCancel={onCancel}
+            onSave={loadUsers}
+          />
         )}
       </div>
     </div>
