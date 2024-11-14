@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { updateUser, fetchUserById, uploadUserProfile } from "../services/api";
+import {
+  updateUser,
+  fetchUserById,
+  uploadUserProfile,
+  deleteUserProfile,
+} from "../services/api";
 
 const UserEditor = ({ user_id, onCancel, onSave }) => {
   const [user, setUser] = useState(null);
@@ -23,6 +28,13 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const handelFileDelet = async () => {
+    await deleteUserProfile(user.id);
+    onSave();
+    onCancel();
+    setFile(null);
   };
 
   const handleSave = async (e) => {
@@ -59,10 +71,15 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
           required
         />
         <input type="file" onChange={handleFileChange} />
-        <button type="submit">Save</button>
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
+        <div>
+          <button type="submit">Save</button>
+          <button type="button" onClick={onCancel}>
+            Cancel
+          </button>
+          <button type="button" onClick={handelFileDelet}>
+            Delet Profile Picture
+          </button>
+        </div>
       </form>
     </div>
   );
