@@ -12,6 +12,7 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
   const [age, setAge] = useState("");
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
 
   useEffect(() => {
     fetchUserById(user_id)
@@ -28,6 +29,7 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
   };
 
   const handelFileDelet = async () => {
@@ -35,6 +37,7 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
     onSave();
     onCancel();
     setFile(null);
+    setFileName("");
   };
 
   const handleSave = async (e) => {
@@ -43,6 +46,7 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
       if (file) {
         await uploadUserProfile(user.id, file);
         setFile(null);
+        setFileName("");
       }
       await updateUser(user.id, { email, age: parseInt(age) });
       onSave();
@@ -58,19 +62,28 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
       <h2>Edit User</h2>
       <form onSubmit={handleSave}>
         {error && <p style={{ color: "red" }}>{error}</p>}
+        <div className="v-inp">
+          <label htmlFor="email">email:</label>
         <input
+          id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <label htmlFor="age">age:</label>
         <input
+          id="age"
           type="number"
           value={age}
           onChange={(e) => setAge(e.target.value)}
           required
         />
-        <input type="file" onChange={handleFileChange} />
+      
+        <label id="file-label" htmlFor="file">Uploda file</label>
+        {file && <img className="disp-img" src={URL.createObjectURL(file)} alt="profile" />}
+        <div id="file-name-disp">{fileName}</div>
+        <input id="file" type="file" onChange={handleFileChange} />
         <div>
           <button type="submit">Save</button>
           <button type="button" onClick={onCancel}>
@@ -80,6 +93,7 @@ const UserEditor = ({ user_id, onCancel, onSave }) => {
             Delet Profile Picture
           </button>
         </div>
+        </div>   
       </form>
     </div>
   );

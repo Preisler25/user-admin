@@ -39,6 +39,7 @@ function App() {
           onUserUpdated={loadUsers}
           onUserDeleted={loadUsers}
         />
+        <div className="vertical_line">
         <UserCreator onUserAdded={loadUsers} />
         {activeUserId !== -1 && (
           <UserEditor
@@ -47,6 +48,7 @@ function App() {
             onSave={loadUsers}
           />
         )}
+        </div>
       </div>
     </div>
   );

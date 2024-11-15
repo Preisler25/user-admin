@@ -20,9 +20,9 @@ const UserList = ({ users, error, onUserDeleted, onUserSelected }) => {
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
         {users.map((user) => (
-          <li key={user.id}>
-            <p>{user.id}</p>
+          <li key={user.id} className="user-cont" >
             <img
+              className="profile-pic"
               src={`http://localhost:3000/users/${
                 user.id
               }/profile?timestamp=${new Date().getTime()}`}
